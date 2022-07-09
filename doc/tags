@@ -1,0 +1,12 @@
+MyAwesomePluginGenericGreet	psyop.txt	/*MyAwesomePluginGenericGreet*
+MyAwesomePluginGreet	psyop.txt	/*MyAwesomePluginGreet*
+my-awesome-plugin-api	psyop.txt	/*my-awesome-plugin-api*
+my-awesome-plugin-commands	psyop.txt	/*my-awesome-plugin-commands*
+my-awesome-plugin-contents	psyop.txt	/*my-awesome-plugin-contents*
+my-awesome-plugin-introduction	psyop.txt	/*my-awesome-plugin-introduction*
+my-awesome-plugin-setup	psyop.txt	/*my-awesome-plugin-setup*
+my-awesome-plugin.txt	psyop.txt	/*my-awesome-plugin.txt*
+my_awesome_plugin.generic_greet()	psyop.txt	/*my_awesome_plugin.generic_greet()*
+my_awesome_plugin.greet()	psyop.txt	/*my_awesome_plugin.greet()*
+my_awesome_plugin.is_configured()	psyop.txt	/*my_awesome_plugin.is_configured()*
+my_awesome_plugin.setup()	psyop.txt	/*my_awesome_plugin.setup()*
