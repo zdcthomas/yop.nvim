@@ -1,4 +1,3 @@
-local psyop = require("psy_op")
 local cursor = vim.fn.cursor
 
 local function set_lines(lines)
@@ -12,12 +11,6 @@ end
 local function type(input)
   input = vim.api.nvim_replace_termcodes(input, true, false, true)
 	vim.api.nvim_feedkeys(input, "x", true)
-end
-
-local function operate(operator, textobj)
-	local esc = vim.api.nvim_replace_termcodes("<Esc>", true, false, true)
-	vim.api.nvim_feedkeys(operator .. esc, "n", false)
-	vim.api.nvim_feedkeys("g@" .. textobj, "n", false)
 end
 
 describe("operators", function()

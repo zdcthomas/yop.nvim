@@ -48,9 +48,9 @@ local set_lines = function(start, stop, lines)
 	vim.api.nvim_buf_set_lines(0, start - 1, stop, false, lines)
 end
 
-local function get_positions(callback_type)
+local function get_positions()
 	-- TODO: This should be driven by the type
-	vim.o.selection = "inclusive"
+	-- vim.o.selection = "inclusive"
 	-- it seems like these marks work properly in visual mode as well, but I'm not sure yet
 	return utils.get_mark("["), utils.get_mark("]")
 end
@@ -60,7 +60,7 @@ local function create_opfunc(funk)
 	return function(callback_type)
 		debug("5: opfunc called")
 		-- vim.o.selection = "inclusive"
-		local first_position, last_position = get_positions(callback_type)
+		local first_position, last_position = get_positions()
 
 		debug("6: positions retrieved")
 		local lines = get_line_from_type(callback_type, first_position, last_position)
@@ -95,7 +95,6 @@ local function create_opfunc(funk)
 			local old_a_reg = vim.fn.getreg("a")
 			local reg_ready = join(lines, "\n")
 			-- This is gross and I would love for there to be a better way
-			vim.pretty_print("new reg" .. reg_ready)
 			vim.fn.setreg("a", reg_ready, "b")
 			vim.cmd([[norm! gv"ap]])
 			vim.fn.setreg("a", old_a_reg, "b")

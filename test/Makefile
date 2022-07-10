@@ -11,6 +11,9 @@ prepare:
 nvim:
 	@nvim --noplugin -u spec.lua
 
+lint:
+	luacheck ../lua/ ./spec/
+
 test:
 ifeq ($(strip $(SPEC)),) # a.k.a. $(SPEC) is empty
 	@$(RUN) -c "PlenaryBustedDirectory spec/ { minimal_init = 'spec.lua' }"
@@ -23,4 +26,4 @@ watch:
 	@find spec/ ../lua/ -name '*.lua' \
 	  | entr make test SPEC=$(SPEC)
 
-all: prepare test
+all: prepare test lint
