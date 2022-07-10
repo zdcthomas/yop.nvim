@@ -81,8 +81,9 @@ describe("operators", function()
 
 	it("operates on blockwise visual selections", function()
 		set_lines({ "first line", "second line" , "third line"})
+		cursor(1, 3)
 
-    type("llV")
+    type("<c-v>jj")
 
 		require("psy_op").create_operator(function(lines)
 			for index, value in ipairs(lines) do
@@ -94,8 +95,7 @@ describe("operators", function()
 		type("<ESC>")
 		type("g@")
 
-		-- type("iw")
-		assert_lines({ "(first line)", "second line" })
+		assert_lines({ "fi(r)st line", "se(c)ond line" , "th(i)rd line"})
 	end)
 
 end)

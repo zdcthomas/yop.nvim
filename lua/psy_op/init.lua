@@ -11,22 +11,20 @@ local Module = {
 
 -- mapping of key to operator func callback,
 
--- local function get_mark(mark)
--- 	local position = vim.api.nvim_buf_get_mark(0, mark)
--- 	if position[1] == 0 then
--- 		return nil
--- 	end
--- 	position[2] = position[2] + 1
--- 	return position
--- end
-
-local function debug(message, level)
-  level = level or 0
-  if level < Module.__debug_level then
-    vim.pretty_print(message)
-  end
+local function join(lines, joiner)
+	local result = ""
+	for _, value in ipairs(lines) do
+		result = result .. value .. joiner
+	end
+	return result
 end
 
+local function debug(message, level)
+	level = level or 0
+	if level < Module.__debug_level then
+		vim.pretty_print(message)
+	end
+end
 
 local function get_line_from_type(callback_type, first_position, last_position)
 	-- different types of operator funcs need different ways of getting lines
@@ -35,8 +33,6 @@ local function get_line_from_type(callback_type, first_position, last_position)
 	elseif callback_type == "char" then
 		return utils.get_text(first_position, last_position)
 	elseif callback_type == "block" then
-		-- we use reg a just cause
-		--
 		local old_reg = vim.fn.getreg("a")
 		vim.cmd([[norm! gv"ay ]])
 		local lines = vim.split(vim.fn.getreg([[a]]), "\n")
@@ -60,19 +56,17 @@ local function get_positions(callback_type)
 end
 
 local function create_opfunc(funk)
-  debug("4: opfunc being created and set")
+	debug("4: opfunc being created and set")
 	return function(callback_type)
-	  debug("5: opfunc called")
+		debug("5: opfunc called")
 		-- vim.o.selection = "inclusive"
 		local first_position, last_position = get_positions(callback_type)
 
-    debug("6: positions retrieved")
+		debug("6: positions retrieved")
 		local lines = get_line_from_type(callback_type, first_position, last_position)
 		if not lines then
 			return
 		end
-
-		-- vim.pretty_print("7: lines gotten successfully " .. lines)
 
 		-- Use the callback defined by the user to transform the lines
 		local maybe_lines = funk(lines, { first = first_position, last = last_position })
@@ -97,6 +91,14 @@ local function create_opfunc(funk)
 				last_position[2],
 				lines
 			)
+		elseif callback_type == "block" then
+			local old_a_reg = vim.fn.getreg("a")
+			local reg_ready = join(lines, "\n")
+			-- This is gross and I would love for there to be a better way
+			vim.pretty_print("new reg" .. reg_ready)
+			vim.fn.setreg("a", reg_ready, "b")
+			vim.cmd([[norm! gv"ap]])
+			vim.fn.setreg("a", old_a_reg, "b")
 		end
 
 		debug("9: lines have been sent")
@@ -112,9 +114,9 @@ function Module.linewise(callback_funk)
 end
 
 function Module.create_operator(funk)
-  debug("2: create_operator")
+	debug("2: create_operator")
 	return function()
-	  debug("3: actual mapping called")
+		debug("3: actual mapping called")
 		-- local old_op_func = vim.go.operatorfunc
 		Module.__opfunc = create_opfunc(funk)
 		vim.go.operatorfunc = "v:lua.require'psy_op'.__opfunc"
@@ -123,21 +125,21 @@ function Module.create_operator(funk)
 		-- has to be an expression. I don't understand why.
 		-- using feedkeys works in practice, but not in test
 		vim.api.nvim_feedkeys("g@", "n", false)
-		-- return "g@"
 	end
 end
 
+-- I don't need this but for now I'm keeping it
 function Module.op_map(mode, mapping, funk, opts)
-  debug("1: op_map called")
-  opts = opts or {}
-  vim.validate({
-    mode = { mode, { "string", "table" } },
-    mapping = { mapping, "string" },
-    funk = { funk, "function" },
-    opts = { opts, "table" },
-  })
+	debug("1: op_map called")
+	opts = opts or {}
+	vim.validate({
+		mode = { mode, { "string", "table" } },
+		mapping = { mapping, "string" },
+		funk = { funk, "function" },
+		opts = { opts, "table" },
+	})
 
-  opts = vim.tbl_deep_extend("force", opts, {expr = true})
+	-- opts = vim.tbl_deep_extend("force", opts, { expr = true })
 
 	vim.keymap.set(mode, mapping, Module.create_operator(funk), opts)
 end
