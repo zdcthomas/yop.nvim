@@ -19,6 +19,14 @@ function Module.get_mark(mark)
 	return position
 end
 
+function Module.join(lines, joiner)
+	local result = ""
+	for _, value in ipairs(lines) do
+		result = result .. value .. joiner
+	end
+	return result
+end
+
 -- [[
 -- Directly calls into get_lines api
 -- ]]

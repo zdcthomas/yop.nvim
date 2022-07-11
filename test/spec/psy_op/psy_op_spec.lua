@@ -9,16 +9,15 @@ local function assert_lines(lines)
 end
 
 local function type(input)
-  input = vim.api.nvim_replace_termcodes(input, true, false, true)
+	input = vim.api.nvim_replace_termcodes(input, true, false, true)
 	vim.api.nvim_feedkeys(input, "x", true)
 end
 
 describe("operators", function()
-
-  before_each(function ()
-    cursor(1,1)
-    set_lines({})
-  end)
+	before_each(function()
+		cursor(1, 1)
+		set_lines({})
+	end)
 
 	it("operates on charwise motions", function()
 		set_lines({ "test word" })
@@ -37,7 +36,7 @@ describe("operators", function()
 	it("operates on charwise visual selections", function()
 		set_lines({ "first line", "second line" })
 
-    type("viw")
+		type("viw")
 
 		require("psy_op").create_operator(function(lines)
 			for index, value in ipairs(lines) do
@@ -56,7 +55,7 @@ describe("operators", function()
 	it("operates on linewise visual selections", function()
 		set_lines({ "first line", "second line" })
 
-    type("V")
+		type("V")
 
 		require("psy_op").create_operator(function(lines)
 			for index, value in ipairs(lines) do
@@ -73,10 +72,10 @@ describe("operators", function()
 	end)
 
 	it("operates on blockwise visual selections", function()
-		set_lines({ "first line", "second line" , "third line"})
+		set_lines({ "first line", "second line", "third line" })
 		cursor(1, 3)
 
-    type("<c-v>jj")
+		type("<c-v>jj")
 
 		require("psy_op").create_operator(function(lines)
 			for index, value in ipairs(lines) do
@@ -88,7 +87,6 @@ describe("operators", function()
 		type("<ESC>")
 		type("g@")
 
-		assert_lines({ "fi(r)st line", "se(c)ond line" , "th(i)rd line"})
+		assert_lines({ "fi(r)st line", "se(c)ond line", "th(i)rd line" })
 	end)
-
 end)

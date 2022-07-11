@@ -1,16 +1,90 @@
-# plugin-template.nvim
+[![CI status][integration-badge]][integration-runs]
 
-[![Integration][integration-badge]][integration-runs]
+# PSYOP!
 
-A template to create Neovim plugins written in [Lua][lua].
+PerSonallY made Operators
 
-## Using
+Make you some operators for great good!
 
-Clone/download it locally and change the references to `my_awesome_plugin`, 
-`my_cool_module` accordingly to your new plugin name. Don't forget to edit the
-[help][help] file accordingly.
+```
+Wait what's an Operator?
+```
 
-You'll need to install [Lua][lua] and [LuaRocks][luarocks] to run the linter.
+What's an operator you might ask. You've almost certainly been using them
+already. An operator is any key that _operates_ over a selection of text,
+selected either through a motion (ex: `iw` for in a word, `ab` around a
+bracket, etc), or through a visual selection.
+
+Some built in operators are 
+- d: delete
+- y: yank
+- c: run selection through an external program
+and many other fun ones! (run `:h operator` for some lesser known but super
+useful operators).
+
+```
+Ok but what does _this_ plugin do
+```
+
+Normally, defining an operator takes a bit of work, you'll have to get the text
+covered by motion or visual selection, _*operate*_ on that text, and then
+replace the text in the buffer. This plugin handles everything for you except
+the operation, so that you can focus on what you really care about.
+
+With PsyOp, all you need is a function that transforms and returns the selected
+lines, or does some other super cool thing.
+
+```
+Alright, I'm sold! How do make my own operator?
+```
+
+
+
+## Some fun example functions for inspiration!
+
+Here's cool little example of a sorting operator, inspired heavily by the [sort
+motion plugin][sort-motion], but with the added feature of asking the user for
+a delimiter to split the line on.
+
+### Sortin'!
+```lua
+function(lines, opts)
+  -- We don't care about anything non alphanumeric here
+  local sort_without_leading_space = function(a, b)
+    -- true = a then b
+    -- false = b then a
+    local pattern = [[^%W*]]
+    return string.gsub(a, pattern, "") < string.gsub(b, pattern, "")
+  end
+  if #lines == 1 then
+    -- If only looking at 1 line, sort that line split by some char gotten from imput
+    local delimeter = utils.get_input("Delimeter: ")
+    local split = vim.split(lines[1], delimeter, { trimempty = true })
+    -- Remember! `table.sort` mutates the table itself
+    table.sort(split, sort_without_leading_space)
+    return { utils.join(split, delimeter) }
+  else
+    -- If there are many lines, sort the lines themselves
+    table.sort(lines, sort_without_leading_space)
+    return lines
+  end
+end
+```
+
+### Searchin!
+
+Here's a real small little guy that'll search in telescope for the text passed
+over in a motion, or selected visually.
+```lua
+function(lines)
+  -- Multiple lines can't be searched for
+  if #lines > 1 then
+    return
+  end
+  require("telescope.builtin").grep_string({ search = lines[1] })
+end
+```
+
 
 ## Testing
 
@@ -43,16 +117,11 @@ $ make watch
 
 In both commands you myght specify a single spec to test/watch using:
 
-```bash
-$ make test SPEC=spec/my_awesome_plugin/my_cool_module_spec.lua
-$ make watch SPEC=spec/my_awesome_plugin/my_cool_module_spec.lua
-```
+## GitHub actions
 
-## Github actions
-
-An Action will run all the tests and the linter on every commit on the main
-branch and also on Pull Request. Tests will be run using 
-[stable and nightly][neovim-test-versions] versions of Neovim.
+On each PR and on Main, a GitHub Action will run all the tests, and the linter.
+Tests will be run using [stable and nightly][neovim-test-versions] versions of
+Neovim.
 
 [lua]: https://www.lua.org/
 [entr]: https://eradman.com/entrproject/
@@ -65,3 +134,4 @@ branch and also on Pull Request. Tests will be run using
 [integration-runs]: https://github.com/m00qek/plugin-template.nvim/actions/workflows/integration.yml
 [neovim-test-versions]: .github/workflows/integration.yml#L17
 [help]: doc/my-awesome-plugin.txt
+[sort-motion]: https://github.com/christoomey/vim-sort-motion

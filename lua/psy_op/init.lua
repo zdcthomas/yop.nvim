@@ -11,13 +11,6 @@ local Module = {
 
 -- mapping of key to operator func callback,
 
-local function join(lines, joiner)
-	local result = ""
-	for _, value in ipairs(lines) do
-		result = result .. value .. joiner
-	end
-	return result
-end
 
 local function debug(message, level)
 	level = level or 0
@@ -69,7 +62,13 @@ local function create_opfunc(funk)
 		end
 
 		-- Use the callback defined by the user to transform the lines
-		local maybe_lines = funk(lines, { first = first_position, last = last_position })
+		local maybe_lines = funk(lines, {
+			position = {
+				first = first_position,
+				last = last_position,
+			},
+			type = callback_type,
+		})
 
 		debug("8: lines have been transformed ")
 
@@ -93,7 +92,7 @@ local function create_opfunc(funk)
 			)
 		elseif callback_type == "block" then
 			local old_a_reg = vim.fn.getreg("a")
-			local reg_ready = join(lines, "\n")
+			local reg_ready = utils.join(lines, "\n")
 			-- This is gross and I would love for there to be a better way
 			vim.fn.setreg("a", reg_ready, "b")
 			vim.cmd([[norm! gv"ap]])
