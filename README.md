@@ -25,13 +25,13 @@ This is a plugin that allows you to easily make you some operators for great goo
 
 What's an operator you might ask. You've almost certainly been using them
 already. An operator is any key that _operates_ over a selection of text,
-selected either through a motion (ex: `iw` for in a word, `ab` around a
-bracket, etc), or through a visual selection.
+selected either through a motion (ex: `iw` = in-a-word, `ab` around-a-bracket,
+etc), or through a visual selection.
 
 Some of the most common built in operators are 
-- d: delete
-- y: yank
-- c: run selection through an external program
+- `d`: delete
+- `y`: yank
+- `c`: run selection through an external program
 
 There're tons of less widely known operators too, and they're definitely worth
 checking out! Run [:h operator][operator-help] to learn more.
@@ -41,7 +41,7 @@ checking out! Run [:h operator][operator-help] to learn more.
 Normally, defining an operator takes a bit of work, you'll have to get the text
 covered by motion or visual selection, _*operate*_ on that text, and then
 replace the text in the buffer. This plugin handles everything for you except
-the operation, so that you can focus on what you really care about.
+the operation, so you can focus on what you really care about.
 
 With YOP, all you need is a function that transforms and returns the selected
 lines, or does some other super cool thing.
@@ -57,8 +57,7 @@ require("yop").op_map
 
 This function takes the same arguments as [vim.keymap.set][keymap.set], except
 that the 3rd argument (normally either a function or a string representing a
-vim command), now must be a function. The following parameters will be passed
-to it.
+vim command), now has to be a function that looks like:
 ```lua
 function (selected_lines, info)
   ...
@@ -68,19 +67,19 @@ end
 where:
 - selected_lines: Table of strings, which represent the text that was moved over by the given motion. 
 - info: a table with extra info about the motion. (Most of the time you won't
-  need this and can just pass in a 1 arity function)
-```lua
-{
-  position = {
-    first = {row_number, column_number},
-    last = {row_number, column_number},
-  },
-  type = motion_callback_type
-}
-```
-Row_number and column_number are 1-indexed integers, motion_callback_type is one of `line`|`char`|`block`
+  need this and can just pass in a 1-arity function)
+  ```lua
+  {
+    position = {
+      first = {row_number, column_number},
+      last = {row_number, column_number},
+    },
+    type = motion_callback_type
+  }
+  ```
+  Row_number and column_number are 1-indexed integers, motion_callback_type is one of `line`|`char`|`block`
 
-The function can optionally return a table of lines, which will replace the
+- optional_replacement_lines: The function can optionally return a table of lines, which will replace the
 selected region in the buffer.
 
 > **Note**
