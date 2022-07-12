@@ -1,8 +1,6 @@
 [![CI status][integration-badge]][integration-runs]
 
-# PSYOP!
-
-# YOP (Your OPerator)
+# YOP (_Y_our _OP_erator)
 
 Make you some operators for great good!
 
