@@ -12,7 +12,7 @@ vim.keymap.set(
   "n",
   ",",
   function()
-    require("psy_op").create_operator(function(lines)
+    require("yop").create_operator(function(lines)
       for index, value in ipairs(lines) do
         lines[index] = "(" .. value .. ")"
       end

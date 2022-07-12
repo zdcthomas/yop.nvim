@@ -9,9 +9,6 @@ local Module = {
 	end,
 }
 
--- mapping of key to operator func callback,
-
-
 local function debug(message, level)
 	level = level or 0
 	if level < Module.__debug_level then

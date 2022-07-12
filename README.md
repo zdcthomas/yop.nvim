@@ -2,7 +2,7 @@
 
 # PSYOP!
 
-PerSonallY made Operators
+# YOP (Your OPerator)
 
 Make you some operators for great good!
 
@@ -15,15 +15,16 @@ already. An operator is any key that _operates_ over a selection of text,
 selected either through a motion (ex: `iw` for in a word, `ab` around a
 bracket, etc), or through a visual selection.
 
-Some built in operators are 
+Some of the most common built in operators are 
 - d: delete
 - y: yank
 - c: run selection through an external program
-and many other fun ones! (run `:h operator` for some lesser known but super
-useful operators).
+
+There're tons of less widely known operators too, and they're definitely worth
+checking out! Run [:h operator][operator-help] to learn more.
 
 ```
-Ok but what does _this_ plugin do
+Ok but what does _this_ plugin do?
 ```
 
 Normally, defining an operator takes a bit of work, you'll have to get the text
@@ -31,13 +32,15 @@ covered by motion or visual selection, _*operate*_ on that text, and then
 replace the text in the buffer. This plugin handles everything for you except
 the operation, so that you can focus on what you really care about.
 
-With PsyOp, all you need is a function that transforms and returns the selected
+With YOP, all you need is a function that transforms and returns the selected
 lines, or does some other super cool thing.
 
 ```
 Alright, I'm sold! How do make my own operator?
 ```
 
+<!-- TODO: finalize this api, do we want to handle the mapping for them? Or
+just let them pass in the func itself-->
 
 
 ## Some fun example functions for inspiration!
@@ -123,6 +126,26 @@ On each PR and on Main, a GitHub Action will run all the tests, and the linter.
 Tests will be run using [stable and nightly][neovim-test-versions] versions of
 Neovim.
 
+## What's in a name
+```
+It's a great plugin, but I really hate that name! Yop!? I mean, come on!
+```
+
+Well, here's a list of other names that were considered that you hopefully hate
+a bit more!
+
+- PSYOP
+- MYOPIC
+- MYOP
+- YOUROP
+- YOP
+- OPPENHEIMER
+- YOPTIMUS PRIME
+- OPTIMUS PRIME
+- YOPOLOPOLIS
+- POP
+
+
 [lua]: https://www.lua.org/
 [entr]: https://eradman.com/entrproject/
 [luarocks]: https://luarocks.org/
@@ -135,3 +158,4 @@ Neovim.
 [neovim-test-versions]: .github/workflows/integration.yml#L17
 [help]: doc/my-awesome-plugin.txt
 [sort-motion]: https://github.com/christoomey/vim-sort-motion
+[operator-help]: https://neovim.io/doc/user/motion.html#operator

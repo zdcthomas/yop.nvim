@@ -22,7 +22,7 @@ describe("operators", function()
 	it("operates on charwise motions", function()
 		set_lines({ "test word" })
 		cursor(1, 7)
-		require("psy_op").create_operator(function(lines)
+		require("yop").create_operator(function(lines)
 			for index, value in ipairs(lines) do
 				lines[index] = "(" .. value .. ")"
 			end
@@ -38,7 +38,7 @@ describe("operators", function()
 
 		type("viw")
 
-		require("psy_op").create_operator(function(lines)
+		require("yop").create_operator(function(lines)
 			for index, value in ipairs(lines) do
 				lines[index] = "(" .. value .. ")"
 			end
@@ -57,7 +57,7 @@ describe("operators", function()
 
 		type("V")
 
-		require("psy_op").create_operator(function(lines)
+		require("yop").create_operator(function(lines)
 			for index, value in ipairs(lines) do
 				lines[index] = "(" .. value .. ")"
 			end
@@ -77,7 +77,7 @@ describe("operators", function()
 
 		type("<c-v>jj")
 
-		require("psy_op").create_operator(function(lines)
+		require("yop").create_operator(function(lines)
 			for index, value in ipairs(lines) do
 				lines[index] = "(" .. value .. ")"
 			end
