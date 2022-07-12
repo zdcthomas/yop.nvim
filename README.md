@@ -84,7 +84,7 @@ selected region in the buffer.
 
 > **Note**
 > Remember, in Lua, you can ignore extra arguments by simply not listing them
-> in the declaration. That means you can pass in a 0-arity, 1-arity, or 2-arity
+> in the declaration. This means that you can pass in a 0-arity, 1-arity, or 2-arity
 > function and all will work!
 
 For some example transformation functions, see [the examples section](#Examples)
@@ -105,11 +105,12 @@ On a buffer that looks like
 7 8 9
 ```
 
-With your cursor on `1` and type in `<leader>bw`, `lines` in the function you
-pass in will be equal to `{ "1 2"}`. Since we told op_map that we'd also like
-this mapping to exist in visual mode, we could also first enter visual mode,
-select a word ahead, and then press `<leader>b`, like `vw<leader>b`. Afterward,
-the buffer will look like:
+With your cursor on `1` type in `<leader>bw`. Now `{ "1 2"}` will be passed in
+as the first argument to the function you passed into. We could also type
+`vw<leader>b`, and since we told `op_map` that we'd also like this mapping to
+exist in visual mode, it will behave identically.
+
+Afterward, the buffer will look like:
 ```
 bread 3
 4 5 6
