@@ -117,6 +117,7 @@ bread 3
 7 8 9
 ```
 
+
 If instead, you type `<leader>bj`, then lines will be `{"1 2 3", "4 5 6"}`
 because `j` is a line wise motion. This is the same as if you entered visual
 line mode with `V` and selected the top two lines before hitting `<leader>b`.
@@ -143,7 +144,7 @@ function(lines, opts)
     return string.gsub(a, pattern, "") < string.gsub(b, pattern, "")
   end
   if #lines == 1 then
-    -- If only looking at 1 line, sort that line split by some char gotten from imput
+    -- If only looking at 1 line, sort that line split by some char gotten from input
     local delimeter = utils.get_input("Delimeter: ")
     local split = vim.split(lines[1], delimeter, { trimempty = true })
     -- Remember! `table.sort` mutates the table itself
@@ -159,7 +160,7 @@ end
 
 ### Searchin!
 
-> **NOTE**
+> **Note**
 > This requires [Telescope][telescope] to be installed
 
 Here's a real small little guy that'll search in [telescope][telescope] for the text passed
@@ -226,7 +227,6 @@ a bit more!
 - MYOPIC
 - MYOP
 - YOUROP
-- YOP
 - OPPENHEIMER
 - YOPTIMUS PRIME
 - OPTIMUS PRIME
