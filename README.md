@@ -21,9 +21,7 @@ Plug 'zdcthomas/yop.nvim'
 
 This is a plugin that allows you to easily make you some operators for great good!
 
-```
-Wait what's an Operator?
-```
+> Wait what's an Operator?
 
 What's an operator you might ask. You've almost certainly been using them
 already. An operator is any key that _operates_ over a selection of text,
@@ -38,9 +36,7 @@ Some of the most common built in operators are
 There're tons of less widely known operators too, and they're definitely worth
 checking out! Run [:h operator][operator-help] to learn more.
 
-```
-Ok but what does _this_ plugin do?
-```
+> Ok but what does _this_ plugin do?
 
 Normally, defining an operator takes a bit of work, you'll have to get the text
 covered by motion or visual selection, _*operate*_ on that text, and then
@@ -50,9 +46,7 @@ the operation, so that you can focus on what you really care about.
 With YOP, all you need is a function that transforms and returns the selected
 lines, or does some other super cool thing.
 
-```
-Alright, I'm sold! How do make my own operator?
-```
+> Alright, I'm sold! How do make my own operator?
 
 ### Making your own operators
 
@@ -223,9 +217,7 @@ Tests will be run using [stable and nightly][neovim-test-versions] versions of
 Neovim.
 
 ### What's in a name
-```
-It's a great plugin, but I really hate that name! Yop!? I mean, come on!
-```
+> It's a great plugin, but I really hate that name! Yop!? I mean, come on!
 
 Well, here's a list of other names that were considered that you hopefully hate
 a bit more!
