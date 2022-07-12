@@ -2,7 +2,24 @@
 
 # YOP (_Y_our _OP_erator)
 
-Make you some operators for great good!
+## Quickstart
+
+Here are some snippets for your plugin manager of choice. These implement only
+the [sorting](#Sortin) operator.
+
+Packer:
+```lua
+use("~/oss/yop.nvim/")
+```
+
+Vim-Plug:
+```VimL
+Plug 'zdcthomas/yop.nvim'
+```
+
+## What is this?
+
+This is a plugin that allows you to easily make you some operators for great good!
 
 ```
 Wait what's an Operator?
@@ -37,17 +54,91 @@ lines, or does some other super cool thing.
 Alright, I'm sold! How do make my own operator?
 ```
 
-<!-- TODO: finalize this api, do we want to handle the mapping for them? Or
-just let them pass in the func itself-->
+### Making your own operators
 
+The primary interface for `yop.nvim` is the `op_map` function.
+```lua
+require("yop").op_map
+```
 
-## Some fun example functions for inspiration!
+This function takes the same arguments as [vim.keymap.set][keymap.set], except
+that the 3rd argument (normally either a function or a string representing a
+vim command), now must be a function. The following parameters will be passed
+to it.
+```lua
+function (selected_lines, info)
+  ...
+  return optional_replacement_lines
+end
+```
+where:
+- selected_lines: Table of strings, which represent the text that was moved over by the given motion. 
+- info: a table with extra info about the motion. (Most of the time you won't
+  need this and can just pass in a 1 arity function)
+```lua
+{
+  position = {
+    first = {row_number, column_number},
+    last = {row_number, column_number},
+  },
+  type = motion_callback_type
+}
+```
+Row_number and column_number are 1-indexed integers, motion_callback_type is one of `line`|`char`|`block`
 
-Here's cool little example of a sorting operator, inspired heavily by the [sort
-motion plugin][sort-motion], but with the added feature of asking the user for
-a delimiter to split the line on.
+The function can optionally return a table of lines, which will replace the
+selected region in the buffer.
 
-### Sortin'!
+> **Note**
+> Remember, in Lua, you can ignore extra arguments by simply not listing them
+> in the declaration. That means you can pass in a 0-arity, 1-arity, or 2-arity
+> function and all will work!
+
+For some example transformation functions, see [the examples section](#Examples)
+
+### Putting it all together
+
+A full (but useless) example might look like:
+```lua
+require("yop").op_map({"n", "v"}, "<leader>b", function(lines, info)
+  return { "bread" }
+end)
+```
+This example simply replaces the entire selected area with the text `bread`.
+On a buffer that looks like
+```
+1 2 3
+4 5 6
+7 8 9
+```
+
+With your cursor on `1` and type in `<leader>bw`, `lines` in the function you
+pass in will be equal to `{ "1 2"}`. Since we told op_map that we'd also like
+this mapping to exist in visual mode, we could also first enter visual mode,
+select a word ahead, and then press `<leader>b`, like `vw<leader>b`. Afterward,
+the buffer will look like:
+```
+bread 3
+4 5 6
+7 8 9
+```
+
+If instead, you type `<leader>bj`, then lines will be `{"1 2 3", "4 5 6"}`
+because `j` is a line wise motion. This is the same as if you entered visual
+line mode with `V` and selected the top two lines before hitting `<leader>b`.
+The buffer will then become
+```
+bread
+7 8 9
+```
+
+## Examples
+
+Here's cool little example of a sorting operator, inspired heavily by the
+[sort motion plugin][sort-motion], but with the added feature of asking the
+user for a delimiter to split the line on.
+
+### Sortin!
 ```lua
 function(lines, opts)
   -- We don't care about anything non alphanumeric here
@@ -74,8 +165,12 @@ end
 
 ### Searchin!
 
-Here's a real small little guy that'll search in telescope for the text passed
+> **NOTE**
+> This requires [Telescope][telescope] to be installed
+
+Here's a real small little guy that'll search in [telescope][telescope] for the text passed
 over in a motion, or selected visually.
+
 ```lua
 function(lines)
   -- Multiple lines can't be searched for
@@ -86,8 +181,11 @@ function(lines)
 end
 ```
 
+## Contributing! (Thank you!)
 
-## Testing
+Please feel free to contribute!
+
+### Testing
 
 This uses [busted][busted], [luassert][luassert] (both through
 [plenary.nvim][plenary]) and [matcher_combinators][matcher_combinators] to
@@ -118,13 +216,13 @@ $ make watch
 
 In both commands you myght specify a single spec to test/watch using:
 
-## GitHub actions
+### GitHub actions
 
 On each PR and on Main, a GitHub Action will run all the tests, and the linter.
 Tests will be run using [stable and nightly][neovim-test-versions] versions of
 Neovim.
 
-## What's in a name
+### What's in a name
 ```
 It's a great plugin, but I really hate that name! Yop!? I mean, come on!
 ```
@@ -157,3 +255,5 @@ a bit more!
 [help]: doc/my-awesome-plugin.txt
 [sort-motion]: https://github.com/christoomey/vim-sort-motion
 [operator-help]: https://neovim.io/doc/user/motion.html#operator
+[telescope]: https://github.com/nvim-telescope/telescope.nvim
+[keymap.set]: https://neovim.io/doc/user/lua.html#vim.keymap.set()
