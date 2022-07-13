@@ -9,7 +9,7 @@ the [sorting](#Sortin) operator.
 
 Packer:
 ```lua
-use("~/oss/yop.nvim/")
+use("zdcthomas/yop.nvim/")
 ```
 
 Vim-Plug:
