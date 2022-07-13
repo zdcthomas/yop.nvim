@@ -13,7 +13,8 @@ local function type(input)
 	vim.api.nvim_feedkeys(input, "x", true)
 end
 
-describe("operators", function()
+
+describe("op_map integration", function()
 	before_each(function()
 		cursor(1, 1)
 		set_lines({})
@@ -21,72 +22,30 @@ describe("operators", function()
 
 	it("operates on charwise motions", function()
 		set_lines({ "test word" })
+		-- cursor           ^
 		cursor(1, 7)
-		require("yop").create_operator(function(lines)
-			for index, value in ipairs(lines) do
-				lines[index] = "(" .. value .. ")"
-			end
-			return lines
-		end)()
 
-		type("iw")
+		type("(iw")
 		assert_lines({ "test (word)" })
 	end)
 
 	it("operates on charwise visual selections", function()
 		set_lines({ "first line", "second line" })
-
-		type("viw")
-
-		require("yop").create_operator(function(lines)
-			for index, value in ipairs(lines) do
-				lines[index] = "(" .. value .. ")"
-			end
-			return lines
-		end)()
-
-		type("<ESC>")
-		type("g@")
-
-		-- type("iw")
+		type("viw(")
 		assert_lines({ "(first) line", "second line" })
 	end)
 
 	it("operates on linewise visual selections", function()
 		set_lines({ "first line", "second line" })
-
-		type("V")
-
-		require("yop").create_operator(function(lines)
-			for index, value in ipairs(lines) do
-				lines[index] = "(" .. value .. ")"
-			end
-			return lines
-		end)()
-
-		type("<ESC>")
-		type("g@")
-
-		-- type("iw")
+		type("V(")
 		assert_lines({ "(first line)", "second line" })
 	end)
 
 	it("operates on blockwise visual selections", function()
 		set_lines({ "first line", "second line", "third line" })
+		-- cursor      ^
 		cursor(1, 3)
-
-		type("<c-v>jj")
-
-		require("yop").create_operator(function(lines)
-			for index, value in ipairs(lines) do
-				lines[index] = "(" .. value .. ")"
-			end
-			return lines
-		end)()
-
-		type("<ESC>")
-		type("g@")
-
+		type("<c-v>jj(")
 		assert_lines({ "fi(r)st line", "se(c)ond line", "th(i)rd line" })
 	end)
 end)
