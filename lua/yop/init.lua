@@ -1,4 +1,4 @@
-local utils = require("psy_op.utils")
+local utils = require("yop.utils")
 
 local Module = {
 	transformations = {},
@@ -114,7 +114,7 @@ function Module.create_operator(funk)
 		debug("3: actual mapping called")
 		-- local old_op_func = vim.go.operatorfunc
 		Module.__opfunc = create_opfunc(funk)
-		vim.go.operatorfunc = "v:lua.require'psy_op'.__opfunc"
+		vim.go.operatorfunc = "v:lua.require'yop'.__opfunc"
 
 		-- Other plugins have this as a string being returned, and then the mapping
 		-- has to be an expression. I don't understand why.
