@@ -109,12 +109,12 @@ function Module.linewise(callback_funk)
 end
 
 function Module.create_operator(funk, linewise)
-  local prefix = ""
-  local postfix = ""
-  if linewise then
-    prefix = "0"
-    postfix = "g_"
-  end
+	local prefix = ""
+	local postfix = ""
+	if linewise then
+		prefix = "0"
+		postfix = "g_"
+	end
 
 	debug("2: create_operator")
 	return function()
@@ -142,7 +142,7 @@ function Module.op_map(mode, mapping, funk, opts)
 		opts = { opts, "table" },
 	})
 	local linewise = opts.linewise or false
-	opts['linewise'] = nil
+	opts["linewise"] = nil
 
 	opts = vim.tbl_deep_extend("force", opts, { expr = true })
 
