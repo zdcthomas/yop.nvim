@@ -13,7 +13,6 @@ local function type(input)
 	vim.api.nvim_feedkeys(input, "x", true)
 end
 
-
 describe("op_map integration", function()
 	before_each(function()
 		cursor(1, 1)
@@ -47,5 +46,12 @@ describe("op_map integration", function()
 		cursor(1, 3)
 		type("<c-v>jj(")
 		assert_lines({ "fi(r)st line", "se(c)ond line", "th(i)rd line" })
+	end)
+
+	it("allows for linewise mappings", function() 
+		set_lines({ "first line", "second line", "third line" })
+		type("j((")
+
+		assert_lines({ "first line", "(second line)", "third line" })
 	end)
 end)

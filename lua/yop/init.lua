@@ -108,7 +108,14 @@ function Module.linewise(callback_funk)
 	end
 end
 
-function Module.create_operator(funk)
+function Module.create_operator(funk, linewise)
+  local prefix = ""
+  local postfix = ""
+  if linewise then
+    prefix = "0"
+    postfix = "g_"
+  end
+
 	debug("2: create_operator")
 	return function()
 		debug("3: actual mapping called")
@@ -119,7 +126,8 @@ function Module.create_operator(funk)
 		-- Other plugins have this as a string being returned, and then the mapping
 		-- has to be an expression. I don't understand why.
 		-- using feedkeys works in practice, but not in test
-		vim.api.nvim_feedkeys("g@", "n", false)
+		-- vim.api.nvim_feedkeys("g@", "n", false)
+		return prefix .. "g@" .. postfix
 	end
 end
 
@@ -133,10 +141,12 @@ function Module.op_map(mode, mapping, funk, opts)
 		funk = { funk, "function" },
 		opts = { opts, "table" },
 	})
+	local linewise = opts.linewise or false
+	opts['linewise'] = nil
 
-	-- opts = vim.tbl_deep_extend("force", opts, { expr = true })
+	opts = vim.tbl_deep_extend("force", opts, { expr = true })
 
-	vim.keymap.set(mode, mapping, Module.create_operator(funk), opts)
+	vim.keymap.set(mode, mapping, Module.create_operator(funk, linewise), opts)
 end
 
 return Module

@@ -20,3 +20,5 @@ local lame_surround = function(lines)
 	return lines
 end
 yop.op_map({ "n", "v" }, "(", lame_surround)
+-- I don't think I actually like this api but I want to get something working
+yop.op_map( "n", "((", lame_surround, {linewise = true})

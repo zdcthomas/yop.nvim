@@ -127,6 +127,28 @@ bread
 7 8 9
 ```
 
+
+> **Warning**
+> The following api is very likely to change, because it sucks, and I hate it.
+
+A linewise version of the same function can also be created by including
+`linewise = true` in the third argument opts. This has to be a different
+mapping, since this includes a motion along with the operator. It also must be
+in normal mode For example,
+```lua
+require("yop").op_map("n", "<leader>bb", function(lines, info)
+  return { "bread" }
+end, {linewise = true})
+```
+
+This allows you to run `<leader>bb` on the first line in this example
+buffer, and change it to:
+```
+(1 2 3)
+4 5 6
+7 8 9
+```
+
 ## Examples
 
 Here's cool little example of a sorting operator, inspired heavily by the
