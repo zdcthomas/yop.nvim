@@ -25,7 +25,7 @@ This is a plugin that allows you to easily make you some operators for great goo
 
 What's an operator you might ask. You've almost certainly been using them
 already. An operator is any key that _operates_ over a selection of text,
-selected either through a motion (ex: `iw` = in-a-word, `ab` around-a-bracket,
+selected either through a motion (ex: `iw`: in-a-word, `ab`: around-a-bracket,
 etc), or through a visual selection.
 
 Some of the most common built in operators are 
