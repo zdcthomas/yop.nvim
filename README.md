@@ -144,7 +144,7 @@ end, {linewise = true})
 This allows you to run `<leader>bb` on the first line in this example
 buffer, and change it to:
 ```
-(1 2 3)
+bread
 4 5 6
 7 8 9
 ```
