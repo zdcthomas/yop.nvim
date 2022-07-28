@@ -1,8 +1,27 @@
+<!--toc:start-->
+- [YOP (Your OPerator)](#yop-your-operator)
+ - [Installation](#installation)
+ - [What is this?](#what-is-this)
+  - [Making your own operators](#making-your-own-operators)
+  - [Putting it all together](#putting-it-all-together)
+ - [Examples](#examples)
+  - [Sortin!](#sortin)
+  - [Searchin!](#searchin)
+ - [Contributing! (Thank you!)](#contributing-thank-you)
+  - [Testing](#testing)
+  - [GitHub actions](#github-actions)
+  - [What's in a name](#whats-in-a-name)
+<!--toc:end-->
+
 [![CI status][integration-badge]][integration-runs]
 
-# YOP (_Y_our _OP_erator)
+# YOP (Your OPerator)
 
-## Quickstart
+> **Warning**
+> This plugin is currently in ALPHA and bindings very well might change!
+> I'll try to indicate breaking changes in the [breakin change issue](https://github.com/zdcthomas/yop.nvim/issues/1)
+
+## Installation
 
 Here are some snippets for your plugin manager of choice. These implement only
 the [sorting](#Sortin) operator.
@@ -59,13 +78,13 @@ This function takes the same arguments as [vim.keymap.set][keymap.set], except
 that the 3rd argument (normally either a function or a string representing a
 vim command), now has to be a function that looks like:
 ```lua
-function (selected_lines, info)
+function (selections, info)
   ...
   return optional_replacement_lines
 end
 ```
 where:
-- selected_lines: Table of strings, which represent the text that was moved over by the given motion. 
+- selections: A list with the selected lines or parts of lines.
 - info: a table with extra info about the motion. (Most of the time you won't
   need this and can just pass in a 1-arity function)
   ```lua
