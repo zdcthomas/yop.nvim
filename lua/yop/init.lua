@@ -100,13 +100,13 @@ local function create_opfunc(funk)
 	end
 end
 
-function Module.linewise(callback_funk)
-	return function()
-		vim.api.nvim_feedkeys("^", "n", false)
-		callback_funk()
-		vim.api.nvim_feedkeys("g_", "n", false)
-	end
-end
+-- function Module.linewise(callback_funk)
+-- 	return function()
+-- 		vim.api.nvim_feedkeys("^", "n", false)
+-- 		callback_funk()
+-- 		vim.api.nvim_feedkeys("g_", "n", false)
+-- 	end
+-- end
 
 function Module.create_operator(funk, linewise)
 	local prefix = ""
@@ -126,8 +126,31 @@ function Module.create_operator(funk, linewise)
 		-- Other plugins have this as a string being returned, and then the mapping
 		-- has to be an expression. I don't understand why.
 		-- using feedkeys works in practice, but not in test
-		-- vim.api.nvim_feedkeys("g@", "n", false)
-		return prefix .. "g@" .. postfix
+		local keys = prefix .. "g@" .. postfix
+		vim.api.nvim_feedkeys(keys, "n", false)
+		-- return prefix .. "g@" .. postfix
+	end
+end
+
+function Module.operator(funk)
+	return function()
+		debug("3: actual mapping called")
+		-- local old_op_func = vim.go.operatorfunc
+		Module.__opfunc = create_opfunc(funk)
+		vim.go.operatorfunc = "v:lua.require'yop'.__opfunc"
+
+		vim.api.nvim_feedkeys("g@", "n", false)
+	end
+end
+
+function Module.linewise_operator(funk)
+	return function()
+		debug("3: actual mapping called")
+		-- local old_op_func = vim.go.operatorfunc
+		Module.__opfunc = create_opfunc(funk)
+		vim.go.operatorfunc = "v:lua.require'yop'.__opfunc"
+
+		vim.api.nvim_feedkeys("0g@g_", "n", false)
 	end
 end
 
@@ -142,11 +165,23 @@ function Module.op_map(mode, mapping, funk, opts)
 		opts = { opts, "table" },
 	})
 	local linewise = opts.linewise or false
-	opts["linewise"] = nil
+	-- opts["linewise"] = nil
 
-	opts = vim.tbl_deep_extend("force", opts, { expr = true })
+	-- opts = vim.tbl_deep_extend("force", opts, {})
 
 	vim.keymap.set(mode, mapping, Module.create_operator(funk, linewise), opts)
 end
+
+-- mod.operator
+--    create the lua func to handle the RHS of a mapping the user mapping of a
+--    user operator
+--
+-- mod.linewise_operator
+--    Create the lua func for the RHS of a linewise operator, e.g gcc in commentary.vim
+--
+-- mode.op_map
+--    Function with the same signature as keymap.set that will also set a
+--    linewise mapping with the lhs being the the same but with the last
+--    character repeated
 
 return Module
