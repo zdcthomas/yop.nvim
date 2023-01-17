@@ -21,8 +21,8 @@ with it!
 ==============================================================================
 2. BASIC SETUP                                *basic-setup*
 
-All of these use the example sorting operator example that appears in the wiki
-on github for this project.
+All of these use the sorting operator example that appears in the wiki on
+github for this project.
 
 Using Lazy.nvim: >
 
@@ -98,7 +98,7 @@ you set.
 
 Lazy loading has become a large part of the neovim plugin landscape, but due
 to the nature of vim operators, the lazy-loadable API of Yop is a bit less
-conenient, since you have to declare your keymappings as an expression mapping
+convenient, since you have to declare your keymappings as an expression mapping
 ( |:map-<expr>| ). Because of this, there are two primary APIs that Yop uses.
 One focused on convenience, and the other focused on flexibility.
 
@@ -185,7 +185,7 @@ yop.setup({config})                                            *yop.setup()*
             2 = print all information
 
 yop.op_map({ mode }, mapping, funk, { opts })                  *yop.greet()*
-        This defines the keymapping of yourdesired operator.
+        This defines the keymapping of your desired operator.
 
         * `mode`, `mapping`, and `opts` all correspond to the arguments given to
             |vim.keymap.set| except that opts also contains the `linewise`
@@ -244,7 +244,7 @@ return a list of the lines which are meant to be changed.
 
 It is also perfectly fine if you only want to use the selected text for some
 side effect, like in the telescope search example in the wiki. In that case,
-nothing needs to be returnd at all, and no change will be made.
+nothing needs to be returned at all, and no change will be made.
 
 Note:
 Remember, in Lua, you can ignore extra arguments by simply not listing them
