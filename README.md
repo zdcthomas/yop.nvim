@@ -117,21 +117,21 @@ On a buffer that looks like
 7 8 9
 ```
 
-With your cursor on `1` type in `<leader>bw`. Now `{ "1 2"}` will be passed in
-as the first argument to the function you passed into. We could also type
+With your cursor on `4` type in `<leader>bw`. Now `{ "4 5"}` will be passed in
+as the first argument to the function you passed in. We could also type
 `vw<leader>b`, and since we told `op_map` that we'd also like this mapping to
 exist in visual mode, it will behave identically.
 
 Afterward, the buffer will look like:
 ```
-bread 3
-4 5 6
+1 2 3
+bread 6
 7 8 9
 ```
 
 
-If instead, you type `<leader>bj`, then lines will be `{"1 2 3", "4 5 6"}`
-because `j` is a line wise motion. This is the same as if you entered visual
+If instead, you type `<leader>bk`, then lines will be `{"1 2 3", "4 5 6"}`
+because `k` is a line wise motion. This is the same as if you entered visual
 line mode with `V` and selected the top two lines before hitting `<leader>b`.
 The buffer will then become
 ```
@@ -141,12 +141,14 @@ bread
 
 
 > **Warning**
-> The following api is very likely to change, because it sucks, and I hate it.
+> The following api is very likely to change.
 
-A linewise version of the same function can also be created by including
-`linewise = true` in the third argument opts. This has to be a different
-mapping, since this includes a motion along with the operator. It also must be
-in normal mode For example,
+A version of the same function that operates on the whole line can also 
+be created by including`linewise = true` in the third argument opts. This 
+has to be a differentmapping, since this includes a motion along with the
+operator. It also must be in normal mode
+
+For example:
 ```lua
 require("yop").op_map("n", "<leader>bb", function(lines, info)
   return { "bread" }
