@@ -1,9 +1,9 @@
 local utils = require("yop.utils")
 
 local Module = {
-	transformations = {},
-	debug_level = 0,
-	__debug_level = 0,
+	config = {
+		debug_level = 0,
+	},
 	__opfunc = function(type)
 		print(type)
 	end,
@@ -11,7 +11,7 @@ local Module = {
 
 local function debug(message, level)
 	level = level or 0
-	if level < Module.__debug_level then
+	if level < Module.config.debug_level then
 		vim.pretty_print(message)
 	end
 end
@@ -100,17 +100,15 @@ local function create_opfunc(funk)
 	end
 end
 
-function Module.linewise(callback_funk)
-	return function()
-		vim.api.nvim_feedkeys("^", "n", false)
-		callback_funk()
-		vim.api.nvim_feedkeys("g_", "n", false)
-	end
+function Module.setup(config)
+	config = config or {}
+	Module.config = vim.tbl_deep_extend("force", Module.config, config)
 end
 
 function Module.create_operator(funk, linewise)
 	local prefix = ""
 	local postfix = ""
+
 	if linewise then
 		prefix = "0"
 		postfix = "g_"
@@ -129,6 +127,11 @@ function Module.create_operator(funk, linewise)
 		-- vim.api.nvim_feedkeys("g@", "n", false)
 		return prefix .. "g@" .. postfix
 	end
+end
+
+function Module.operate(funk, linewise)
+	linewise = linewise or false
+	return Module.create_operator(funk, linewise)()
 end
 
 -- I don't need this but for now I'm keeping it

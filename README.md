@@ -42,15 +42,18 @@ This is a plugin that allows you to easily make you some operators for great goo
 
 > Wait what's an Operator?
 
-What's an operator you might ask. You've almost certainly been using them
-already. An operator is any key that _operates_ over a selection of text,
-selected either through a motion (ex: `iw`: in-a-word, `ab`: around-a-bracket,
-etc), or through a visual selection.
+That's a good question! There's not much talk about operators in the plugin
+community, but you've almost certainly been using them already. An operator is
+any key that _operates_ over a selection of text, selected either through a
+motion (ex: `iw`: in-a-word, `ab`: around-a-bracket, etc), or through a visual
+selection.
 
 Some of the most common built in operators are 
 - `d`: delete
 - `y`: yank
-- `c`: run selection through an external program
+- `c`: cut
+- `!`: run selection through an external program
+- `gq`: format selection
 
 There're tons of less widely known operators too, and they're definitely worth
 checking out! Run [:h operator][operator-help] to learn more.

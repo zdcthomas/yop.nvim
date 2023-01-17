@@ -1,3 +1,14 @@
+local yop = require("yop")
+local lame_surround = function(lines)
+	for index, value in ipairs(lines) do
+		lines[index] = "(" .. value .. ")"
+	end
+	return lines
+end
+yop.op_map({ "n", "v" }, "(", lame_surround)
+-- I don't think I actually like this api but I want to get something working
+yop.op_map("n", "((", lame_surround, { linewise = true })
+
 local cursor = vim.fn.cursor
 
 local function set_lines(lines)
@@ -48,7 +59,7 @@ describe("op_map integration", function()
 		assert_lines({ "fi(r)st line", "se(c)ond line", "th(i)rd line" })
 	end)
 
-	it("allows for linewise mappings", function() 
+	it("allows for linewise mappings", function()
 		set_lines({ "first line", "second line", "third line" })
 		type("j((")
 

@@ -1,0 +1,256 @@
+*yop.txt*  Define Your own OPerators easily!
+
+==============================================================================
+CONTENTS                                          *yop-contents*
+
+  1. introduction ............................... |yop-awesome-plugin-introduction|
+  2. basic setup ................................ |lazy-loading|
+  3. advanced setup ............................. |lazy-loading|
+  4. api ........................................ |yop-api|
+  5. writing selection handler functions ........ |yop-selection-function|
+
+==============================================================================
+1. INTRODUCTION                               *yop-introduction*
+
+Yop (Your OPerator) makes it (hopefully) much easier to create your own
+|operator|s in neovim. This plugin takes care of setting up the |opfunc| and
+passing the correct text to your custom function, so that all you have to
+worry about is manipulating the selected text, or doing whatever else you want
+with it!
+
+==============================================================================
+2. BASIC SETUP                                *basic-setup*
+
+All of these use the example sorting operator example that appears in the wiki
+on github for this project.
+
+Using Lazy.nvim: >
+
+	{
+		"zdcthomas/yop.nvim",
+		keys = "gs",
+		config = function()
+			vim.keymap.set({ "n", "v" }, "gs", function()
+				return require("yop").operate(function(lines, _)
+					local utils = require("yop.utils")
+					-- We don't care about anything non alphanumeric here
+					local sort_without_leading_space = function(a, b)
+						-- true = a then b
+						-- false = b then a
+						local pattern = [[^%W*]]
+						return string.gsub(a, pattern, "") < string.gsub(b, pattern, "")
+					end
+					if #lines == 1 then
+						-- local delimeter = utils.get_input("Delimeter: ")
+						local delimeter = ","
+						local split = vim.split(lines[1], delimeter, { trimempty = true })
+						-- Remember! `table.sort` mutates the table itself
+						table.sort(split, sort_without_leading_space)
+						return { utils.join(split, delimeter) }
+					else
+						-- If there are many lines, sort the lines themselves
+						table.sort(lines, sort_without_leading_space)
+						return lines
+					end
+				end, false)
+			end, { expr = true })
+		end,
+	}
+
+Using Packer: >
+  use({
+		"zdcthomas/yop.nvim",
+		keys = "gs",
+		config = function()
+			vim.keymap.set({ "n", "v" }, "gs", function()
+				return require("yop").operate(function(lines, _)
+					local utils = require("yop.utils")
+					-- We don't care about anything non alphanumeric here
+					local sort_without_leading_space = function(a, b)
+						-- true = a then b
+						-- false = b then a
+						local pattern = [[^%W*]]
+						return string.gsub(a, pattern, "") < string.gsub(b, pattern, "")
+					end
+					if #lines == 1 then
+						-- local delimeter = utils.get_input("Delimeter: ")
+						local delimeter = ","
+						local split = vim.split(lines[1], delimeter, { trimempty = true })
+						-- Remember! `table.sort` mutates the table itself
+						table.sort(split, sort_without_leading_space)
+						return { utils.join(split, delimeter) }
+					else
+						-- If there are many lines, sort the lines themselves
+						table.sort(lines, sort_without_leading_space)
+						return lines
+					end
+				end, false)
+			end, { expr = true })
+		end,
+	})
+
+When writing your own configuration, change the keys field to whatever keymap
+you set.
+
+
+==============================================================================
+3. ADVANCED SETUP                             *lazy-loading*
+
+Lazy loading has become a large part of the neovim plugin landscape, but due
+to the nature of vim operators, the lazy-loadable API of Yop is a bit less
+conenient, since you have to declare your keymappings as an expression mapping
+( |:map-<expr>| ). Because of this, there are two primary APIs that Yop uses.
+One focused on convenience, and the other focused on flexibility.
+
+Convenience mapping: >
+
+    require('yop').op_map({"n", "x"}, "gs", function(lines, _)
+      local utils = require("yop.utils")
+      -- We don't care about anything non alphanumeric here
+      local sort_without_leading_space = function(a, b)
+        -- true = a then b
+        -- false = b then a
+        local pattern = [[^%W*]]
+        return string.gsub(a, pattern, "") < string.gsub(b, pattern, "")
+      end
+      if #lines == 1 then
+        -- local delimeter = utils.get_input("Delimeter: ")
+        local delimeter = ","
+        local split = vim.split(lines[1], delimeter, { trimempty = true })
+        -- Remember! `table.sort` mutates the table itself
+        table.sort(split, sort_without_leading_space)
+        return { utils.join(split, delimeter) }
+      else
+        -- If there are many lines, sort the lines themselves
+        table.sort(lines, sort_without_leading_space)
+        return lines
+      end
+    end)
+
+This style of mapping is essentially identical to making a normal keymap via
+|vim.keymap.set| except the function passed in is the transformation function
+you wrote to transform the lines covered by your selection.
+
+However, since this style of mapping requires Yop at call time, Lazy.nvim and
+Packer (when using the module arg) will immediately load the plugin. 
+
+
+More lazy loadable setup: >
+
+    vim.keymap.set({ "n", "v" }, "gs", function()
+      return require("yop").operate(function(lines, _)
+        local utils = require("yop.utils")
+        -- We don't care about anything non alphanumeric here
+        local sort_without_leading_space = function(a, b)
+          -- true = a then b
+          -- false = b then a
+          local pattern = [[^%W*]]
+          return string.gsub(a, pattern, "") < string.gsub(b, pattern, "")
+        end
+        if #lines == 1 then
+          -- local delimeter = utils.get_input("Delimeter: ")
+          local delimeter = ","
+          local split = vim.split(lines[1], delimeter, { trimempty = true })
+          -- Remember! `table.sort` mutates the table itself
+          table.sort(split, sort_without_leading_space)
+          return { utils.join(split, delimeter) }
+        else
+          -- If there are many lines, sort the lines themselves
+          table.sort(lines, sort_without_leading_space)
+          return lines
+        end
+      end, false)
+    end, { expr = true })
+
+This setup is more easy to lazy load with Lazy.nvim or Packer, but it's more
+verbose and also has the foot gun of the keymap being an expr mapping, and
+needing to return the result of the |yop.operate| function.
+
+Since Yop is a fairly small plugin it should load fairly fast, and it could be
+lazy loaded with the `keys` key in both Packer and Lazy, so in general I
+suggest using op_map.
+
+==============================================================================
+4. API                                                 yop-api
+
+
+yop.setup({config})                                            *yop.setup()*
+        Configures this plugin, merging the passed in table with the default
+        options. Calling this is completely optional, and if not called, the
+        default options will be used. The default options are:
+
+        * `debug_level`: an integer denoting what to print. 
+            0 = print nothing
+            1 = print crucial information
+            2 = print all information
+
+yop.op_map({ mode }, mapping, funk, { opts })                  *yop.greet()*
+        This defines the keymapping of yourdesired operator.
+
+        * `mode`, `mapping`, and `opts` all correspond to the arguments given to
+            |vim.keymap.set| except that opts also contains the `linewise`
+            key, which allows the user to create a |linewise| mapping, for
+            example, the `gcc` mapping in `vim-commentary`
+
+        * `funk` is a |yop-selection-function|
+
+yop.operate(funk, linewise_mapping? )                          *yop.greet()*
+        This function returns an expr string as well as setting the opfunc
+        appropriately. Since this function returns an expr string, it's result
+        must also be returned within the `keymap.set` call back.
+      
+        * `funk` is a |yop-selection-function|
+        * `linewise_mapping?` is a boolean which, when true, will cause the
+          expression returned to be a |linewise-mapping|.
+
+
+==============================================================================
+5. LINEWISE                                            *linewise-operators*
+
+A few functions allow for the easy creation of linewise operator mappings.
+These mappings operate over the entire line that the cursor is currently on.
+These are entirely equivalent to first calling `0` to go to the beginning of
+the line, then calling the operator you've defined, and then `g_` to operate
+over the line to the end.
+
+Many plugins define this type of operator, such as vim-surround with `yss` and
+vim-commentary with `gcc`.
+
+==============================================================================
+4. WRITING SELECTION HANDLER FUNCTIONS                 yop-selection-function
+
+Selection Handler functions are the core of Yop's functionality. These function
+always take the signature of >
+  function(selections, info)
+  end
+
+where:
+        * selections: A list with the selected lines or parts of lines.
+        * info: a table with extra info about the motion. (Most of the time you won't
+          need this and can just pass in a 1-arity function)
+          ```lua
+          {
+            position = {
+              first = {row_number, column_number},
+              last = {row_number, column_number},
+            },
+            type = motion_callback_type
+          }
+          ```
+          Row_number and column_number are 1-indexed integers, motion_callback_type is one of `line`|`char`|`block`
+
+If you want to change the text that was selected, then this function must
+return a list of the lines which are meant to be changed.
+
+It is also perfectly fine if you only want to use the selected text for some
+side effect, like in the telescope search example in the wiki. In that case,
+nothing needs to be returnd at all, and no change will be made.
+
+Note:
+Remember, in Lua, you can ignore extra arguments by simply not listing them
+in the declaration. This means that you can pass in a 0-arity, 1-arity, or 2-arity
+function and all will work!
+
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:noet:fen:noet:
