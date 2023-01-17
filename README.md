@@ -53,7 +53,7 @@ the operation, so you can focus on what you really care about.
 With YOP, all you need is a function that transforms and returns the selected
 lines, or does some other super cool thing.
 
-> Alright, I'm sold! How do make my own operator?
+> Alright, I'm sold! How do I make my own operator?
 
 ### Making your own operators
 
@@ -158,7 +158,7 @@ bread
 
 ## Examples
 
-Here's cool little example of a sorting operator, inspired heavily by the
+Here's a cool little example of a sorting operator, inspired heavily by the
 [sort motion plugin][sort-motion], but with the added feature of asking the
 user for a delimiter to split the line on.
 
@@ -238,7 +238,7 @@ file is changed using:
 $ make watch
 ```
 
-In both commands you myght specify a single spec to test/watch using:
+In both commands you might specify a single spec to test/watch using:
 
 ### GitHub actions
 
