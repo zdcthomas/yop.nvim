@@ -1,18 +1,3 @@
-<!--toc:start-->
-- [YOP (Your OPerator)](#yop-your-operator)
- - [Installation](#installation)
- - [What is this?](#what-is-this)
-  - [Making your own operators](#making-your-own-operators)
-  - [Putting it all together](#putting-it-all-together)
- - [Examples](#examples)
-  - [Sortin!](#sortin)
-  - [Searchin!](#searchin)
- - [Contributing! (Thank you!)](#contributing-thank-you)
-  - [Testing](#testing)
-  - [GitHub actions](#github-actions)
-  - [What's in a name](#whats-in-a-name)
-<!--toc:end-->
-
 [![CI status][integration-badge]][integration-runs]
 
 # YOP (Your OPerator)
