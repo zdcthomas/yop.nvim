@@ -254,9 +254,9 @@ Tests will be run using [stable and nightly][neovim-test-versions] versions of
 Neovim.
 
 ### What's in a name
-> It's a great plugin, but I really hate that name! Yop!? I mean, come on!
+> It's a great plugin, but I really hate that name! Yop!? I mean, come on! How do you even pronounce it?
 
-Well, here's a list of other names that were considered that you hopefully hate
+Well, first off, it's YAWP, and second, here's a list of other names that were considered that you hopefully hate
 a bit more!
 
 - PSYOP
