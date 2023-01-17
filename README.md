@@ -11,6 +11,11 @@
 Here are some snippets for your plugin manager of choice. These implement only
 the [sorting](#Sortin) operator.
 
+Lazy.nvim:
+```lua
+{"zdcthomas/yop.nvim/"}
+```
+
 Packer:
 ```lua
 use("zdcthomas/yop.nvim/")
