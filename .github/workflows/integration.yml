@@ -1,54 +1,27 @@
-name: Integration
-
-on:
-  # push:
-  #   branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
+on: [push, pull_request]
+name: default
 jobs:
   stylua:
     name: stylua
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: JohnnyMorganz/stylua-action@1.0.0
+      - uses: actions/checkout@v3
+      - uses: JohnnyMorganz/stylua-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          # CLI arguments
-          args: --color always --check lua/
+          args: --color always --check lua
   test:
-    name: Tests
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        nvim-versions: ['stable']
-
+        nvim-versions: ['stable', 'nightly']
+    name: test
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-
-    - uses: rhysd/action-setup-vim@v1
-      with:
-        neovim: true
-        version: ${{ matrix.nvim-versions }}
-
-    - name: Setup ‘lua’
-      uses: leafo/gh-actions-lua@v8
-      with:
-        luaVersion: "5.1.5"
-
-    - name: Setup ‘luarocks’
-      uses: leafo/gh-actions-luarocks@v4
-
-    - name: Install dependencies
-      run: |
-        make -C ./test prepare
-
-    - name: Run linter
-      run: luacheck lua/ test/spec/
-
-    - name: Run tests
-      run: make -C ./test test
+      - name: checkout
+        uses: actions/checkout@v3
+      - uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.nvim-versions }}
+      - name: run tests
+        run: make test
