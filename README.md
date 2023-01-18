@@ -220,32 +220,13 @@ Please feel free to contribute!
 
 This uses [busted][busted], [luassert][luassert] (both through
 [plenary.nvim][plenary]) and [matcher_combinators][matcher_combinators] to
-define tests in `test/spec/` directory. These dependencies are required only to
-run tests, that's why they are installed as git submodules.
-
-Make sure your shell is in the `./test` directory or, if it is in the root directory,
-replace `make` by `make -C ./test` in the commands below.
-
-To init the dependencies run
-
-```bash
-$ make prepare
-```
+define tests in `test/spec/` directory.
 
 To run all tests just execute
 
 ```bash
 $ make test
 ```
-
-If you have [entr(1)][entr] installed you may use it to run all tests whenever a
-file is changed using:
-
-```bash
-$ make watch
-```
-
-In both commands you might specify a single spec to test/watch using:
 
 ### GitHub actions
 
