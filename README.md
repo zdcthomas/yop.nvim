@@ -13,12 +13,12 @@ the [sorting](#Sortin) operator.
 
 Lazy.nvim:
 ```lua
-{"zdcthomas/yop.nvim/"}
+{"zdcthomas/yop.nvim"}
 ```
 
 Packer:
 ```lua
-use("zdcthomas/yop.nvim/")
+use("zdcthomas/yop.nvim")
 ```
 
 Vim-Plug:
