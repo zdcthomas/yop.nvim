@@ -184,7 +184,7 @@ yop.setup({config})                                            *yop.setup()*
             1 = print crucial information
             2 = print all information
 
-yop.op_map({ mode }, mapping, funk, { opts })                  *yop.greet()*
+yop.op_map({ mode }, mapping, funk, { opts })                  *yop.op_map()*
         This defines the keymapping of your desired operator.
 
         * `mode`, `mapping`, and `opts` all correspond to the arguments given to
@@ -194,7 +194,7 @@ yop.op_map({ mode }, mapping, funk, { opts })                  *yop.greet()*
 
         * `funk` is a |yop-selection-function|
 
-yop.operate(funk, linewise_mapping? )                          *yop.greet()*
+yop.operate(funk, linewise_mapping? )                          *yop.operate()*
         This function returns an expr string as well as setting the opfunc
         appropriately. Since this function returns an expr string, it's result
         must also be returned within the `keymap.set` call back.
