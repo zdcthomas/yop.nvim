@@ -12,7 +12,7 @@ local Module = {
 local function debug(message, level)
 	level = level or 0
 	if level < Module.config.debug_level then
-		vim.pretty_print(message)
+		vim.print(message)
 	end
 end
 
